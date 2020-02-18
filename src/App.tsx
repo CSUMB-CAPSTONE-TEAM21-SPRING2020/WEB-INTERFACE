@@ -1,6 +1,8 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './styles/App.css';
+
+//"Cannot find module './assets/logo.svg'" workaround. It just works.
+const logo = require("./logo.svg") as string;
 
 function App() {
   return (
