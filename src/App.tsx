@@ -1,12 +1,17 @@
 //Imports
 import React from 'react';
-import './styles/App.css';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 //Components
-import Home from "./components/Home";
-import Login from "./components/Login";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
+
+//Pages
+import Home from "./screens/Home";
+import Login from "./screens/Login";
+
+//CSS
+import './styles/App.css';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 //"Cannot find module './assets/logo.svg'" workaround. It just works.
 const logo = require("./assets/logo.svg") as string;
@@ -16,25 +21,19 @@ function App() {
   return (
     <Router> 
     <div className="App">
-      <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
-        <div className="container">
-          <Link className="navbar-brand" to={"/"}>Berry Harvest Optimizer</Link>
-          <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
-            <ul className="navbar-nav ml-auto">
-              <li className="nav-item">
-                <Link className="nav-link" to={"/"}>Home</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to={"/login"}>Login</Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to={"/data"}>Data</Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-      
+      <Navbar bg="dark" variant="dark">
+        <Navbar.Brand href="">Berry Harvest Optimizer</Navbar.Brand>
+          <Nav className="mr-auto">
+            <Link to="/" className="nav-link">Home</Link>
+            <Link to="/login" className="nav-link">Login</Link>
+            <Link to="/data" className="nav-link">Data</Link>
+          </Nav>
+        <Form inline>
+          <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+          <Button variant="outline-info">Search</Button>
+        </Form>
+      </Navbar>
+
       <div className="auth-wrapper">
         <div className="auth-inner">
           <Switch>
