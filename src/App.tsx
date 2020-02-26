@@ -16,7 +16,7 @@ function App() {
   return (
     <Router> 
     <div className="App">
-      <nav className="navbar navbar-expand-lg navbar-light fixed-top">
+      <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
         <div className="container">
           <Link className="navbar-brand" to={"/"}>Berry Harvest Optimizer</Link>
           <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
