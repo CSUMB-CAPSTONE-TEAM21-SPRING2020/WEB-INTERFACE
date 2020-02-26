@@ -4,6 +4,7 @@
   box-sizing: border-box;
 }
 
+/*White background as requested*/
 body {
   background: #fafafa !important;
   min-height: 100vh;
@@ -13,18 +14,13 @@ body {
 }
 
 h1,h2,h3,h4,h5,h6,label,span {
-  font-weight: 500;
+  font-weight: 400;
   font-family: 'Fira Sans', sans-serif;
 }
 
 body, html, .App, #root, .auth-wrapper {
   width: 100%;
   height: 100%;
-}
-
-.navbar-dark {
-  background-color: #212121;
-  box-shadow: 0px 14px 80px #000000;
 }
 
 .auth-wrapper {
@@ -54,47 +50,4 @@ body, html, .App, #root, .auth-wrapper {
   margin: 0;
   line-height: 1;
   padding-bottom: 20px;
-}
-
-.custom-control-label {
-  font-weight: 400;
-}
-
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
