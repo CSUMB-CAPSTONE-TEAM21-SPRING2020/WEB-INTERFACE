@@ -8,6 +8,7 @@ import { Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
 //Pages
 import Home from "./screens/Home";
 import Login from "./screens/Login";
+import MachineList from "./screens/MachineList";
 
 //CSS
 import './styles/App.css';
@@ -27,6 +28,7 @@ function App() {
             <Link to="/" className="nav-link">Home</Link>
             <Link to="/login" className="nav-link">Login</Link>
             <Link to="/data" className="nav-link">Data</Link>
+            <Link to="/machineList" className="nav-link">List</Link>
           </Nav>
         <Form inline>
           <FormControl type="text" placeholder="Search" className="mr-sm-2" />
@@ -37,6 +39,7 @@ function App() {
       <Switch>
         <Route exact path='/' component={Home} />
         <Route path="/login" component={Login} />
+        <Route path="/machineList" component={MachineList}/> 
       </Switch>
     </div>
     </Router>
