@@ -33,15 +33,11 @@ function App() {
           <Button variant="outline-info">Search</Button>
         </Form>
       </Navbar>
-
-      <div className="auth-wrapper">
-        <div className="auth-inner">
-          <Switch>
-            <Route exact path='/' component={Home} />
-            <Route path="/login" component={Login} />
-          </Switch>
-        </div>
-      </div>
+      
+      <Switch>
+        <Route exact path='/' component={Home} />
+        <Route path="/login" component={Login} />
+      </Switch>
     </div>
     </Router>
   );
