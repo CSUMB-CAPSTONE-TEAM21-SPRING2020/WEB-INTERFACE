@@ -9,6 +9,7 @@ import { Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
 import Home from "./screens/Home";
 import Login from "./screens/Login";
 import MachineList from "./screens/MachineList";
+import Settings from "./screens/Settings";
 
 //CSS
 import './styles/App.css';
@@ -20,7 +21,7 @@ const logo = require("./assets/logo.svg") as string;
 //Navbar & router links
 function App() {
   return (
-    <Router> 
+    <Router>
     <div className="App">
       <Navbar bg="dark" variant="dark">
         <Navbar.Brand href="">Berry Harvest Optimizer</Navbar.Brand>
@@ -29,17 +30,19 @@ function App() {
             <Link to="/login" className="nav-link">Login</Link>
             <Link to="/data" className="nav-link">Data</Link>
             <Link to="/machineList" className="nav-link">List</Link>
+            <Link to="/settings" className="nav-link">Settings</Link>
           </Nav>
         <Form inline>
           <FormControl type="text" placeholder="Search" className="mr-sm-2" />
           <Button variant="outline-info">Search</Button>
         </Form>
       </Navbar>
-      
+
       <Switch>
         <Route exact path='/' component={Home} />
         <Route path="/login" component={Login} />
-        <Route path="/machineList" component={MachineList}/> 
+        <Route path="/machineList" component={MachineList}/>
+        <Route path="/settings" component={Settings}/>
       </Switch>
     </div>
     </Router>
