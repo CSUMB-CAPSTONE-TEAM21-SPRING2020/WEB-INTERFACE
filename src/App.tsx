@@ -6,8 +6,8 @@ import { BrowserRouter, Router, Switch, Route, Link } from "react-router-dom";
 import * as routes from "./constants/routes";
 
 //Pages
-import Home from "./screens/Home";
-import Login from "./screens/Login";
+import {Home} from "./screens/Home";
+import {Login} from "./screens/Login";
 import MachineList from "./screens/MachineList";
 import Settings from "./screens/Settings";
 import Logout from "./screens/Logout";
@@ -21,7 +21,7 @@ import { render } from '@testing-library/react';
 
 //Firebase
 import { firebase } from "./firebase";
-import { withAuthorization } from "./firebase/withAuthorization";
+import { withAuthentication } from "./firebase/withAuthentication";
 
 //"Cannot find module './assets/logo.svg'" workaround. It just works.
 const logo = require("./assets/logo.svg") as string;
@@ -63,4 +63,4 @@ class AppComponent extends Component{
   }
 }
 
-export const App = (AppComponent);
+export const App = withAuthentication(AppComponent);

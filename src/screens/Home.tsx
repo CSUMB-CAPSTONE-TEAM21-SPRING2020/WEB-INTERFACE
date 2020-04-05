@@ -1,11 +1,14 @@
-import React, { Component } from "react";
+import * as React from "react";
 
-export default class Login extends Component {
-    render() {
-        return (
-            <div>
-                <p>Home page under construction</p>
-            </div>
-        );
-    }
+class HomeComponent extends React.Component {
+  public render() {
+    return (
+      <div>
+        <h2>Home Page</h2>
+        <p>The Home Page is accessible by every signed in user.</p>
+      </div>
+    );
+  }
 }
+
+export const Home = (HomeComponent);
