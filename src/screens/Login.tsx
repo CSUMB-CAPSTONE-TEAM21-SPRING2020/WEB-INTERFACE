@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import '../styles/Login.css';
 
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import firebase, { auth, emailProvider, googleProvider } from '../config';
+import firebase, { auth } from '../config';
 
 var uiConfig = {
     // Popup signin flow rather than redirect flow.
     signInFlow: 'redirect',
     // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
-    signInSuccessUrl: '/home',
+    signInSuccessUrl: '/',
     // We will display Google and Facebook as auth providers.
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -23,40 +23,7 @@ export default class Login extends Component {
             username: '',
             user: null 
         }
-        
-        // this.emailLogin = this.emailLogin.bind(this); 
-        // this.googleLogin = this.googleLogin.bind(this); 
-        // this.logout = this.logout.bind(this);
     }
-
-    // emailLogin() {
-    //     auth.signInWithPopup(emailProvider) 
-    //       .then((result) => {
-    //         const user = result.user;
-    //         this.setState({
-    //           user
-    //         });
-    //       });
-    //   }
-
-    //   googleLogin() {
-    //     auth.signInWithPopup(googleProvider) 
-    //       .then((result) => {
-    //         const user = result.user;
-    //         this.setState({
-    //           user
-    //         });
-    //       });
-    //   }
-
-    //   logout(){
-    //     auth.signOut()
-    //     .then(() => {
-    //       this.setState({
-    //         user: null
-    //       });
-    //     });
-    //   }
 
     componentDidMount() {
         auth.onAuthStateChanged((user) => {
@@ -67,17 +34,6 @@ export default class Login extends Component {
     }
 
     render(){
-        // return(
-        //     <div>
-        //         <button onClick={this.emailLogin}>Log In With Email</button>    
-        //         <button onClick={this.googleLogin}>Log In With Google</button>  
-        //     </div>  
-        // );
-        
-        const divMargin = {
-            marginTop:'5%'
-        };
-
         return (
             <div className="auth-wrapper">
                 <div className="auth-inner">

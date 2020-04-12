@@ -4,14 +4,15 @@ import { BrowserRouter } from "react-router-dom";
 import './styles/index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-//import FirebaseProvider from './firebase/firebase';
+import FirebaseProvider from './firebase/firebase';
 
 
 ReactDOM.render(
-    /*<FirebaseProvider>*/
+    <FirebaseProvider>
         <BrowserRouter>
             <App />
-        </BrowserRouter>,
+        </BrowserRouter>
+        </FirebaseProvider>,
     
     document.getElementById("root")
 );
