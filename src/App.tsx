@@ -15,12 +15,18 @@ import './styles/App.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import Navigation from './components/Navigation';
 
+import firebase from "firebase/app";
+import "firebase/auth";
+import {FirebaseAuthProvider} from "@react-firebase/auth";
+import { config } from "./config";
+
 //"Cannot find module './assets/logo.svg'" workaround. It just works.
 const logo = require("./assets/logo.svg") as string;
 
 //Navbar & router links
 function App() {
   return (
+    <FirebaseAuthProvider firebase={firebase} {...config}>
     <Router>
     <div className="App">
       <Navigation/>
@@ -33,7 +39,7 @@ function App() {
       </Switch>
     </div>
     </Router>
-
+    </FirebaseAuthProvider>
   );
 }
 

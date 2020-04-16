@@ -2,7 +2,11 @@ import React, { Component } from "react";
 import '../styles/Login.css';
 
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import firebase, { auth } from '../config';
+
+import firebase from "firebase/app";
+import "firebase/auth";
+import {FirebaseAuthProvider} from "@react-firebase/auth";
+import { config } from "../../src/config";
 
 var uiConfig = {
     // Popup signin flow rather than redirect flow.
@@ -17,30 +21,32 @@ var uiConfig = {
   };
 
 export default class Login extends Component {
-    constructor(props: Readonly<{}>){
-        super(props);
-        this.state = {
-            username: '',
-            user: null 
-        }
-    }
+    // constructor(props: Readonly<{}>){
+    //     super(props);
+    //     this.state = {
+    //         username: '',
+    //         user: null 
+    //     }
+    // }
 
-    componentDidMount() {
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-            this.setState({ user });
-            } 
-        });
-    }
+    // componentDidMount() {
+    //     auth.onAuthStateChanged((user) => {
+    //         if (user) {
+    //         this.setState({ user });
+    //         } 
+    //     });
+    // }
 
     render(){
         return (
+            <FirebaseAuthProvider {...config} firebase={firebase}>
             <div className="auth-wrapper">
                 <div className="auth-inner">
                     <h3>Login</h3>
                     <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
                 </div>
             </div>
+            </FirebaseAuthProvider>
         );
         
             /*
