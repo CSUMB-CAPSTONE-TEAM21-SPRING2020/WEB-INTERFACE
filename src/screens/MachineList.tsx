@@ -26,15 +26,22 @@ let machineData = dataRef.get()
     console.log('Error getting documents', err);
 });
 
-//Real-time data observer - probably not functioning
+//observer looks for changes in snapshot - probably not functioning
 let observer = dataRef.onSnapshot(querySnapshot => {
-  console.log(`Received query snapshot of size ${querySnapshot.size}`);
-  // ...
+  querySnapshot.docChanges().forEach(change => {
+    if (change.type === 'added') {
+      //console.log('New data: ', change.doc.data());
+    }
+    if (change.type === 'modified') {
+      //console.log('Modified data: ', change.doc.data());
+    }
+    if (change.type === 'removed') {
+      //console.log('Removed data: ', change.doc.data());
+    }
+  });
 }, err => {
   console.log(`Encountered error: ${err}`);
 });
-
-
 
 //Incase we need a custom object
 // class Machine {
@@ -68,6 +75,25 @@ export default class MachineList extends React.Component<any, any>{
         const data = querySnapshot.docs.map(doc => doc.data());
         console.log(data);
         this.setState({ Data: data });
+      });
+
+      dataRef.onSnapshot(querySnapshot => {
+        querySnapshot.docChanges().forEach(change => {
+          if (change.type === 'added') {
+            console.log('New data: ', change.doc.data());
+            //update the state
+            const data = querySnapshot.docs.map(doc => doc.data());
+            this.setState({ Data: data });
+          }
+          if (change.type === 'modified') {
+            console.log('Modified data: ', change.doc.data());
+          }
+          if (change.type === 'removed') {
+            console.log('Removed data: ', change.doc.data());
+          }
+        });
+      }, err => {
+        console.log(`Encountered error: ${err}`);
       });
   }
     render() {
