@@ -14,34 +14,34 @@ var db = firebase.firestore();
 //getting most recent data from firestore based on timestamp
 let dataRef = db.collection('berries/machine1/data').orderBy("timestamp", "desc").limit(1);
 
-let machineData = dataRef.get()
-  .then(snapshot => {
-    snapshot.forEach(doc => {      
-      console.log('Ripe: ' + doc.data().ripe);
-      console.log('Unripe: ' + doc.data().unripe);
-      console.log('Timestamp: ' + doc.data().timestamp);
-    });
-  })
-  .catch(err => {
-    console.log('Error getting documents', err);
-});
+// let machineData = dataRef.get()
+//   .then(snapshot => {
+//     snapshot.forEach(doc => {      
+//       console.log('Ripe: ' + doc.data().ripe);
+//       console.log('Unripe: ' + doc.data().unripe);
+//       console.log('Timestamp: ' + doc.data().timestamp);
+//     });
+//   })
+//   .catch(err => {
+//     console.log('Error getting documents', err);
+// });
 
 //observer looks for changes in snapshot - probably not functioning
-let observer = dataRef.onSnapshot(querySnapshot => {
-  querySnapshot.docChanges().forEach(change => {
-    if (change.type === 'added') {
-      //console.log('New data: ', change.doc.data());
-    }
-    if (change.type === 'modified') {
-      //console.log('Modified data: ', change.doc.data());
-    }
-    if (change.type === 'removed') {
-      //console.log('Removed data: ', change.doc.data());
-    }
-  });
-}, err => {
-  console.log(`Encountered error: ${err}`);
-});
+// let observer = dataRef.onSnapshot(querySnapshot => {
+//   querySnapshot.docChanges().forEach(change => {
+//     if (change.type === 'added') {
+//       //console.log('New data: ', change.doc.data());
+//     }
+//     if (change.type === 'modified') {
+//       //console.log('Modified data: ', change.doc.data());
+//     }
+//     if (change.type === 'removed') {
+//       //console.log('Removed data: ', change.doc.data());
+//     }
+//   });
+// }, err => {
+//   console.log(`Encountered error: ${err}`);
+// });
 
 //Incase we need a custom object
 // class Machine {
