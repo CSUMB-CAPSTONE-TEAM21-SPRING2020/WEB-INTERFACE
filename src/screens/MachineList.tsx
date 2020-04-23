@@ -14,17 +14,41 @@ var db = firebase.firestore();
 //getting most recent data from firestore based on timestamp
 let dataRef = db.collection('berries/machine1/data').orderBy("timestamp", "desc").limit(1);
 
-// let machineData = dataRef.get()
+// let machineNames = db.collection('berries').get()
 //   .then(snapshot => {
 //     snapshot.forEach(doc => {      
-//       console.log('Ripe: ' + doc.data().ripe);
-//       console.log('Unripe: ' + doc.data().unripe);
-//       console.log('Timestamp: ' + doc.data().timestamp);
+//       console.log(doc.data());
+//       machineArray.push(doc.data().name);
+//       console.log("machine array: " + machineArray);
 //     });
 //   })
 //   .catch(err => {
 //     console.log('Error getting documents', err);
 // });
+
+// let machineData = db.collection('berries/' + machineArray[0] + '/data').get()
+// .then(snapshot => {
+//   snapshot.forEach(doc => {
+//     if(doc.exists){
+//       console.log(doc.data());
+//     }else{
+//       console.log("suffering");
+//     }      
+//     //machineArray.push(doc.data().name);
+//     //console.log("machine array: " + machineArray);
+//   });
+// })
+// .catch(err => {
+//   console.log('Error getting documents', err);
+// });
+
+
+let observer = dataRef.onSnapshot(docSnapshot => {
+  console.log(`Received doc snapshot: ${docSnapshot}`);
+  // ...
+}, err => {
+  console.log(`Encountered error: ${err}`);
+});
 
 //observer looks for changes in snapshot - probably not functioning
 // let observer = dataRef.onSnapshot(querySnapshot => {
@@ -62,20 +86,84 @@ export default class MachineList extends React.Component<any, any>{
   //functioning constructor
   constructor(props: any){
     super(props);
-    const Data: any[] = [];
+    //aaaahhh
+    var machine1: any[] = [];
+    var machine2: any[] = [];
+    var machine3: any[] = [];
+    var machineArray: any[] = [];
     this.state = {
-      Data
+      machine1,
+      machine2,
+      machine3,
+      machineArray
     };
   };
 
+  accordian(){
+    this.state.machineArray.forEach((element: any) => {
+     return(
+      <>
+      <Accordion.Toggle as={Card.Header} eventKey="0">
+        Machine No. 1
+      </Accordion.Toggle>
+      <Accordion.Collapse eventKey="0" key = {element}>
+        <Card.Body>
+          {/* <p>{JSON.stringify(this.state.Data, null, 2)}</p> */}
+          
+          {this.state.element.map((d: { ripe: number; unripe: number; }, index: any) => (
+            <>
+              <p>Ripe: {d.ripe}</p>
+              <p>Unripe: {d.unripe}</p>
+            </>
+          ))}
+        </Card.Body>
+      </Accordion.Collapse>
+      </>
+     );
+    });
+  }
+
   componentDidMount() {
-    db.collection('berries/machine1/data').orderBy("timestamp", "desc").limit(1)
-      .get()
-      .then(querySnapshot => {
-        const data = querySnapshot.docs.map(doc => doc.data());
-        console.log(data);
-        this.setState({ Data: data });
+    db.collection('berries').get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          console.log(doc.id);
+          db.collection('berries/' + doc.id + '/data').orderBy("timestamp", "desc").limit(1)
+          .get()
+          .then(querySnapshot => {
+            const data = querySnapshot.docs.map(m_doc => m_doc.data());
+            console.log(data);
+            this.setState({ [doc.id]: data });
+          });
+        })
       });
+
+    // db.collection('berries/machine1/data').orderBy("timestamp", "desc").limit(1)
+    // //db.collection('berries')
+    //   .get()
+    //   .then(querySnapshot => {
+    //     const data = querySnapshot.docs.map(doc => doc.data());
+    //     console.log(data);
+    //     this.setState({ machine1: data });
+    //   });
+
+    //   db.collection('berries/machine2/data').orderBy("timestamp", "desc").limit(1)
+    // //db.collection('berries')
+    //   .get()
+    //   .then(querySnapshot => {
+    //     const data = querySnapshot.docs.map(doc => doc.data());
+    //     console.log(data);
+    //     this.setState({ machine2: data });
+    //   });
+
+    //   db.collection('berries/machine3/data').orderBy("timestamp", "desc").limit(1)
+    // //db.collection('berries')
+    //   .get()
+    //   .then(querySnapshot => {
+    //     const data = querySnapshot.docs.map(doc => doc.data());
+    //     console.log(data);
+    //     this.setState({ machine3: data });
+    //   });
 
       dataRef.onSnapshot(querySnapshot => {
         querySnapshot.docChanges().forEach(change => {
@@ -95,7 +183,7 @@ export default class MachineList extends React.Component<any, any>{
       }, err => {
         console.log(`Encountered error: ${err}`);
       });
-  }
+    }
     render() {
         return (
           <FirestoreProvider {...config} firebase={firebase}>
@@ -110,9 +198,9 @@ export default class MachineList extends React.Component<any, any>{
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey="0">
                           <Card.Body>
-                            <p>{JSON.stringify(this.state.Data, null, 2)}</p>
+                            {/* <p>{JSON.stringify(this.state.Data, null, 2)}</p> */}
                             
-                            {this.state.Data.map((d: { ripe: number; unripe: number; }, index: any) => (
+                            {this.state.machine1.map((d: { ripe: number; unripe: number; }, index: any) => (
                               <>
                                 <p>Ripe: {d.ripe}</p>
                                 <p>Unripe: {d.unripe}</p>
@@ -127,9 +215,12 @@ export default class MachineList extends React.Component<any, any>{
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey="1">
                           <Card.Body>
-                            <p>% Green: 7</p>
-                            <p>% Blue: 69</p>
-                            <p>% Other: 24</p>
+                          {this.state.machine2.map((d: { ripe: number; unripe: number; }, index: any) => (
+                              <>
+                                <p>Ripe: {d.ripe}</p>
+                                <p>Unripe: {d.unripe}</p>
+                              </>
+                            ))}
                           </Card.Body>
                         </Accordion.Collapse>
                       </Card>
@@ -139,9 +230,12 @@ export default class MachineList extends React.Component<any, any>{
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey="2">
                           <Card.Body>
-                            <p>% Green: 11</p>
-                            <p>% Blue: 88</p>
-                            <p>% Other: 1</p>
+                          {this.state.machine3.map((d: { ripe: number; unripe: number; }, index: any) => (
+                            <>
+                              <p>Ripe: {d.ripe}</p>
+                              <p>Unripe: {d.unripe}</p>
+                            </>
+                          ))}
                           </Card.Body>
                         </Accordion.Collapse>
                       </Card>
