@@ -135,8 +135,32 @@ export default class MachineList extends React.Component<any, any>{
             console.log(data);
             this.setState({ [doc.id]: data });
           });
+
+          //Data observers
+          db.collection('berries/' + doc.id + '/data').orderBy("timestamp", "desc").limit(1).onSnapshot(querySnapshot => {
+            querySnapshot.docChanges().forEach(change => {
+              if (change.type === 'added') {
+                console.log('New data: ', change.doc.data());
+                //update the state
+                const data = querySnapshot.docs.map(doc => doc.data());
+                this.setState({ [doc.id]: data });
+              }
+              if (change.type === 'modified') {
+                console.log('Modified data: ', change.doc.data());
+                //update the state
+                const data = querySnapshot.docs.map(doc => doc.data());
+                this.setState({ [doc.id]: data });
+              }
+              if (change.type === 'removed') {
+                console.log('Removed data: ', change.doc.data());
+              }
+            });
+          }, err => {
+            console.log(`Encountered error: ${err}`);
+          });
         })
       });
+    }
 
     // db.collection('berries/machine1/data').orderBy("timestamp", "desc").limit(1)
     // //db.collection('berries')
@@ -165,25 +189,26 @@ export default class MachineList extends React.Component<any, any>{
     //     this.setState({ machine3: data });
     //   });
 
-      dataRef.onSnapshot(querySnapshot => {
-        querySnapshot.docChanges().forEach(change => {
-          if (change.type === 'added') {
-            console.log('New data: ', change.doc.data());
-            //update the state
-            const data = querySnapshot.docs.map(doc => doc.data());
-            this.setState({ Data: data });
-          }
-          if (change.type === 'modified') {
-            console.log('Modified data: ', change.doc.data());
-          }
-          if (change.type === 'removed') {
-            console.log('Removed data: ', change.doc.data());
-          }
-        });
-      }, err => {
-        console.log(`Encountered error: ${err}`);
-      });
-    }
+    //   dataRef.onSnapshot(querySnapshot => {
+    //     querySnapshot.docChanges().forEach(change => {
+    //       if (change.type === 'added') {
+    //         console.log('New data: ', change.doc.data());
+    //         //update the state
+    //         const data = querySnapshot.docs.map(doc => doc.data());
+    //         this.setState({ Data: data });
+    //       }
+    //       if (change.type === 'modified') {
+    //         console.log('Modified data: ', change.doc.data());
+    //       }
+    //       if (change.type === 'removed') {
+    //         console.log('Removed data: ', change.doc.data());
+    //       }
+    //     });
+    //   }, err => {
+    //     console.log(`Encountered error: ${err}`);
+    //   });
+    // }
+
     render() {
         return (
           <FirestoreProvider {...config} firebase={firebase}>
