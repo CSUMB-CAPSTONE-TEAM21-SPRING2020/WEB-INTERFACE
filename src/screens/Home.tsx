@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import firebase from "firebase/app";
 import "firebase/auth";
+import 'firebase/firestore';
 import {FirebaseAuthProvider, FirebaseAuthConsumer, IfFirebaseAuthedAnd, IfFirebaseAuthed} from "@react-firebase/auth";
 import { config } from "../config";
 //import firebase from '../config';
@@ -16,13 +17,25 @@ import { config } from "../config";
 //   uid = user.uid;
 // }
 
-export default class Login extends Component {
+//firebase.initializeApp(config);
+
+export default class Home extends Component {
     render() {
         return (
             <div>
                 <FirebaseAuthProvider {...config} firebase={firebase}>
                 <FirebaseAuthConsumer>
                 {({ isSignedIn, user, providerId }) => {
+                    var db = firebase.firestore();
+                    if(user != null){
+                        db.collection('users').doc(user.uid).get().then(function(doc) {
+                            if(!doc.exists){
+                                db.collection('users').doc(user.uid).set({
+                                    name: user.displayName,
+                                });
+                            }
+                        });
+                    }
                     return (
                     <pre style={{ height: 300, overflow: "auto" }}>
                         {JSON.stringify({ isSignedIn, user, providerId }, null, 2)}
