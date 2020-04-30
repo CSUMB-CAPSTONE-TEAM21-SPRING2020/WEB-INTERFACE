@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
+import update from 'immutability-helper';
 
 import firebase, { database } from "firebase/app";
 import 'firebase/firestore';
@@ -87,42 +88,18 @@ export default class MachineList extends React.Component<any, any>{
   constructor(props: any){
     super(props);
     //aaaahhh
-    var machine1: any[] = [];
-    var machine2: any[] = [];
-    var machine3: any[] = [];
+    var machines_Data: any[] = [];
+    // var machine2: any[] = [];
+    // var machine3: any[] = [];
     var machineArray: any[] = [];
     this.state = {
-      machine1,
-      machine2,
-      machine3,
+      machines_Data,
       machineArray
     };
   };
 
-  accordian(){
-    this.state.machineArray.forEach((element: any) => {
-     return(
-      <>
-      <Accordion.Toggle as={Card.Header} eventKey="0">
-        Machine No. 1
-      </Accordion.Toggle>
-      <Accordion.Collapse eventKey="0" key = {element}>
-        <Card.Body>
-          {/* <p>{JSON.stringify(this.state.Data, null, 2)}</p> */}
-          
-          {this.state.element.map((d: { ripe: number; unripe: number; }, index: any) => (
-            <>
-              <p>Ripe: {d.ripe}</p>
-              <p>Unripe: {d.unripe}</p>
-            </>
-          ))}
-        </Card.Body>
-      </Accordion.Collapse>
-      </>
-     );
-    });
-  }
-
+  //TODO: Shift to storing in the 2D array
+  //TODO: Render accordian via 2d array
   componentDidMount() {
     db.collection('berries').get()
       .then(snapshot => {
@@ -133,7 +110,12 @@ export default class MachineList extends React.Component<any, any>{
           .then(querySnapshot => {
             const data = querySnapshot.docs.map(m_doc => m_doc.data());
             console.log(data);
-            this.setState({ [doc.id]: data });
+            const tmp_data = this.state.machines_Data;
+            // Add item to it
+            tmp_data.push({ [doc.id] : data });
+            // Set state
+            this.setState({ machines_Data: tmp_data });
+            console.log(tmp_data);
           });
 
           //Data observers
@@ -143,13 +125,25 @@ export default class MachineList extends React.Component<any, any>{
                 console.log('New data: ', change.doc.data());
                 //update the state
                 const data = querySnapshot.docs.map(doc => doc.data());
-                this.setState({ [doc.id]: data });
+                this.setState(update(this.state, {
+                  machines_Data: {
+                    [doc.id]: {
+                      $set: data
+                    }
+                  }
+                }));
               }
               if (change.type === 'modified') {
                 console.log('Modified data: ', change.doc.data());
                 //update the state
                 const data = querySnapshot.docs.map(doc => doc.data());
-                this.setState({ [doc.id]: data });
+                this.setState(update(this.state, {
+                  machines_Data: {
+                    [doc.id]: {
+                      $set: data
+                    }
+                  }
+                }));
               }
               if (change.type === 'removed') {
                 console.log('Removed data: ', change.doc.data());
@@ -162,52 +156,33 @@ export default class MachineList extends React.Component<any, any>{
       });
     }
 
-    // db.collection('berries/machine1/data').orderBy("timestamp", "desc").limit(1)
-    // //db.collection('berries')
-    //   .get()
-    //   .then(querySnapshot => {
-    //     const data = querySnapshot.docs.map(doc => doc.data());
-    //     console.log(data);
-    //     this.setState({ machine1: data });
-    //   });
+    createAccordion = () => {
+      let dyn_Accordion = []
+  
+      // Outer loop to create parent
+      for (let i = 0; i < this.state.machines_Data.length; i++) {
+        let {arr} = this.state.machines_Data;
+        dyn_Accordion.push(
+          <Card className="machine-card">
+            <Accordion.Toggle as={Card.Header} eventKey="0">
+              Machine No. {i}
+            </Accordion.Toggle>
+            <Accordion.Collapse eventKey="0">
+              <Card.Body>
+                {arr.map((d: { ripe: number; unripe: number; }, index: any) => (
+                  <>
+                    <p>Ripe: {d.ripe}</p>
+                    <p>Unripe: {d.unripe}</p>
+                  </>
+                ))}
+              </Card.Body>
+            </Accordion.Collapse>
+        </Card>
+        )
 
-    //   db.collection('berries/machine2/data').orderBy("timestamp", "desc").limit(1)
-    // //db.collection('berries')
-    //   .get()
-    //   .then(querySnapshot => {
-    //     const data = querySnapshot.docs.map(doc => doc.data());
-    //     console.log(data);
-    //     this.setState({ machine2: data });
-    //   });
-
-    //   db.collection('berries/machine3/data').orderBy("timestamp", "desc").limit(1)
-    // //db.collection('berries')
-    //   .get()
-    //   .then(querySnapshot => {
-    //     const data = querySnapshot.docs.map(doc => doc.data());
-    //     console.log(data);
-    //     this.setState({ machine3: data });
-    //   });
-
-    //   dataRef.onSnapshot(querySnapshot => {
-    //     querySnapshot.docChanges().forEach(change => {
-    //       if (change.type === 'added') {
-    //         console.log('New data: ', change.doc.data());
-    //         //update the state
-    //         const data = querySnapshot.docs.map(doc => doc.data());
-    //         this.setState({ Data: data });
-    //       }
-    //       if (change.type === 'modified') {
-    //         console.log('Modified data: ', change.doc.data());
-    //       }
-    //       if (change.type === 'removed') {
-    //         console.log('Removed data: ', change.doc.data());
-    //       }
-    //     });
-    //   }, err => {
-    //     console.log(`Encountered error: ${err}`);
-    //   });
-    // }
+      }
+      return dyn_Accordion
+    }
 
     render() {
         return (
@@ -217,53 +192,7 @@ export default class MachineList extends React.Component<any, any>{
                 <div className="auth-inner">
                   <div className="App">
                     <Accordion defaultActiveKey="">
-                      <Card className="machine-card">
-                        <Accordion.Toggle as={Card.Header} eventKey="0">
-                          Machine No. 1
-                        </Accordion.Toggle>
-                        <Accordion.Collapse eventKey="0">
-                          <Card.Body>
-                            {/* <p>{JSON.stringify(this.state.Data, null, 2)}</p> */}
-                            
-                            {this.state.machine1.map((d: { ripe: number; unripe: number; }, index: any) => (
-                              <>
-                                <p>Ripe: {d.ripe}</p>
-                                <p>Unripe: {d.unripe}</p>
-                              </>
-                            ))}
-                          </Card.Body>
-                        </Accordion.Collapse>
-                      </Card>
-                      <Card className="machine-card">
-                        <Accordion.Toggle as={Card.Header} eventKey="1">
-                          Machine No. 2
-                        </Accordion.Toggle>
-                        <Accordion.Collapse eventKey="1">
-                          <Card.Body>
-                          {this.state.machine2.map((d: { ripe: number; unripe: number; }, index: any) => (
-                              <>
-                                <p>Ripe: {d.ripe}</p>
-                                <p>Unripe: {d.unripe}</p>
-                              </>
-                            ))}
-                          </Card.Body>
-                        </Accordion.Collapse>
-                      </Card>
-                      <Card className="machine-card">
-                        <Accordion.Toggle as={Card.Header} eventKey="2">
-                          Machine No. 3
-                        </Accordion.Toggle>
-                        <Accordion.Collapse eventKey="2">
-                          <Card.Body>
-                          {this.state.machine3.map((d: { ripe: number; unripe: number; }, index: any) => (
-                            <>
-                              <p>Ripe: {d.ripe}</p>
-                              <p>Unripe: {d.unripe}</p>
-                            </>
-                          ))}
-                          </Card.Body>
-                        </Accordion.Collapse>
-                      </Card>
+                      {this.createAccordion()}
                       </Accordion>
                     </div>
                   </div>
