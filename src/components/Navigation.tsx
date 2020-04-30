@@ -12,7 +12,6 @@ import "firebase/auth";
 import {FirebaseAuthProvider, FirebaseAuthConsumer, IfFirebaseAuthed, IfFirebaseUnAuthed} from "@react-firebase/auth";
 import { config } from "../config";
 
-
 export default class Navigation extends Component{
     // constructor(props: Readonly<{}>){
     //     super(props);
@@ -30,10 +29,18 @@ export default class Navigation extends Component{
                                 <Link to={HOME} className="nav-link">Home</Link>
                                 <Link to="/data" className="nav-link">Data</Link>
                                 <Link to={MACHINES} className="nav-link">List</Link>
-                                <Link to={SETTINGS} className="nav-link">Settings</Link>
                                 <IfFirebaseAuthed>
                                     {() => {
-                                        return <Link to={LOGOUT} className="nav-link">Logout</Link> 
+                                        return <>
+                                                <Link to={SETTINGS} className="nav-link">Settings</Link>
+                                                <Link to={HOME} className="nav-link" 
+                                                    onClick={() => {
+                                                        firebase.auth().signOut();
+                                                    }}
+                                                >
+                                                    Logout
+                                                </Link> 
+                                                </>
                                     }}
                                 </IfFirebaseAuthed>
                                 <IfFirebaseUnAuthed>
@@ -43,10 +50,32 @@ export default class Navigation extends Component{
                                 </IfFirebaseUnAuthed>
                                 
                             </Nav>
-                            <Form inline>
+                            <FirebaseAuthConsumer>
+                            {({ user }) => {
+                                var userPhoto;
+                                if(user != null){
+                                    userPhoto = user.photoURL;
+                                    console.log(userPhoto);
+                                    return(
+                                        <Navbar.Brand href={SETTINGS}>
+                                        <img
+                                            src={userPhoto}
+                                            width="30"
+                                            height="30"
+                                            className="d-inline-block align-top"
+                                            alt="React Bootstrap logo"
+                                            style={{ borderRadius : "50%", border: '1px solid black' }}
+                                        />
+                                        </Navbar.Brand>
+                                    );
+                                }
+                                userPhoto = null;
+                            }}
+                            </FirebaseAuthConsumer>
+                            {/* <Form inline>
                             <FormControl type="text" placeholder="Search" className="mr-sm-2" />
                             <Button variant="outline-info">Search</Button>
-                            </Form>
+                            </Form> */}
                         </Navbar>
                 </FirebaseAuthProvider>
             );
