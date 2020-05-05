@@ -28,10 +28,12 @@ export default class Home extends Component {
                 {({ isSignedIn, user, providerId }) => {
                     var db = firebase.firestore();
                     if(user != null){
+                        document.cookie = user.uid;
                         db.collection('users').doc(user.uid).get().then(function(doc) {
                             if(!doc.exists){
                                 db.collection('users').doc(user.uid).set({
                                     name: user.displayName,
+                                    machines: ["mach1"]
                                 });
                             }
                         });
