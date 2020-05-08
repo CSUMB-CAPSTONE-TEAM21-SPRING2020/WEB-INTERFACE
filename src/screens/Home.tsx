@@ -20,6 +20,35 @@ import { config } from "../config";
 //firebase.initializeApp(config);
 
 export default class Home extends Component {
+    constructor(props: any){
+      super(props);
+
+    };
+
+    componentDidMount(){
+      let myHeaders = new Headers();
+      myHeaders.append('Content-Type', 'application/json');
+      // https://securetoken.googleapis.com/v1/token?key=AIzaSyAtBU6Yjowpn21S5C3UI1CyY17QbDlSUgU
+      // https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=AIzaSyAtBU6Yjowpn21S5C3UI1CyY17QbDlSUgU
+      let myRequest = new Request('https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=AIzaSyAtBU6Yjowpn21S5C3UI1CyY17QbDlSUgU');
+      // console.log(myRequest.mode)
+      // myRequest.headers = myHeaders;
+      // myRequest.method = 'GET';
+      // myRequest.mode = 'cors';
+      // myRequest.cache = 'default';
+
+      
+      fetch(myRequest).then(function(response){
+            console.log(response.json());
+        }).catch(function(error){
+          console.log('Error', error);
+        })
+    };
+
+    // getApiToken(){
+      // fetch('https://securetoken.googleapis.com/v1/token?key=AIzaSyAtBU6Yjowpn21S5C3UI1CyY17QbDlSUgU')
+    // }
+
     render() {
         return (
             <div>
@@ -28,7 +57,7 @@ export default class Home extends Component {
                 {({ isSignedIn, user, providerId }) => {
                     var db = firebase.firestore();
                     if(user != null){
-                        document.cookie = user.uid;
+                        document.cookie = 'uid=' + user.uid;
                         db.collection('users').doc(user.uid).get().then(function(doc) {
                             if(!doc.exists){
                                 db.collection('users').doc(user.uid).set({
