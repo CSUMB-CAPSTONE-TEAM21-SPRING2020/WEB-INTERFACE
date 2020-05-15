@@ -4,7 +4,7 @@ import React, { Component } from "react";
 //Components
 import { Link } from "react-router-dom";
 import { Navbar, Nav, Form, FormControl, Button } from "react-bootstrap";
-import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../assets/bootstrap.min.css';
 import { LOGOUT, SETTINGS, MACHINES, HOME, LOGIN } from "../constants/routes";
 
 import firebase from "firebase/app";
