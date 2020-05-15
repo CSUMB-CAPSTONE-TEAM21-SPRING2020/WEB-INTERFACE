@@ -27,7 +27,7 @@ export default class Navigation extends Component{
                             <Navbar.Brand href="">Berry Harvest Optimizer</Navbar.Brand>
                             <Nav className="mr-auto">
                                 <Link to={HOME} className="nav-link">Home</Link>
-                                <Link to="/data" className="nav-link">Data</Link>
+                                {/* <Link to="/data" className="nav-link">Data</Link> */}
                                 <Link to={MACHINES} className="nav-link">List</Link>
                                 <IfFirebaseAuthed>
                                     {() => {
